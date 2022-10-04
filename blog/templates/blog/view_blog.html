@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block blog_item.title %}Главная страница блога{% endblock %}
+
+
+{% block content %}
+        <div class="card mb-3">
+        <div class="card-header">
+            Категория: <a href="{{ blog_item.category.get_absolute_url }}">{{ blog_item.category }}</a>
+        </div>
+        <div class="card-body">
+            <div class="media">
+                {% if blog_item.photo %}
+                    <img src="{{ blog_item.photo.url }}" alt="" class="me-3 float-start">
+                {% else %}
+                    <img src="https://res.cloudinary.com/teepublic/image/private/s--JSbJY5l9--/t_Resized%20Artwork/c_fit,g_north_west,h_954,w_954/co_000000,e_outline:48/co_000000,e_outline:inner_fill:48/co_ffffff,e_outline:48/co_ffffff,e_outline:inner_fill:48/co_bbbbbb,e_outline:3:1000/c_mpad,g_center,h_1260,w_1260/b_rgb:eeeeee/c_limit,f_auto,h_313,q_90,w_313/v1532023611/production/designs/2911462_0"
+                         alt="" class="me-3 float-start">
+
+                {% endif %}
+                <div class="media-body">
+                    <h5 class="card-title">{{ blog_item.title }}</h5>
+                    <p class="card-text">{{ blog_item.content}}</p>
+                </div>
+            </div>
+
+        </div>
+        <div class="card-footer text-muted">
+            {{ blog_item.created_at|date:"j E Y" }}
+        </div>
+</div>
+
+{% endblock %}
+
+
+
+
+
+
