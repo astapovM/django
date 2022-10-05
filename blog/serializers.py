@@ -10,24 +10,30 @@ class BlogModel:
         self.content = content
 
 
-class BlogSerializer(serializers.Serializer):
-    title = serializers.CharField(max_length=250)
-    content = serializers.CharField()
-    photo = serializers.ImageField()
-    category = serializers.CharField()
+class BlogSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Blog
+        fields = "__all__"
 
-
-    def create(self, validated_data):
-        return Blog.objects.create(**validated_data)
-
-
-    def update(self, instance, validated_data):
-        instance.title = validated_data.get("title", instance.title)
-        instance.content = validated_data.get('content', instance.content)
-        instance.photo = validated_data.get('photo', instance.photo)
-        instance.category = validated_data.get('category', instance.category)
-        instance.save()
-        return instance
+# class BlogSerializer(serializers.Serializer):
+#
+#     title = serializers.CharField(max_length=250)
+#     content = serializers.CharField()
+#     photo = serializers.ImageField()
+#     category = serializers.CharField()
+#
+#
+#     def create(self, validated_data):
+#         return Blog.objects.create(**validated_data)
+#
+#
+#     def update(self, instance, validated_data):
+#         instance.title = validated_data.get("title", instance.title)
+#         instance.content = validated_data.get('content', instance.content)
+#         instance.photo = validated_data.get('photo', instance.photo)
+#         instance.category = validated_data.get('category', instance.category)
+#         instance.save()
+#         return instance
 
 
 # def encode():

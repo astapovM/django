@@ -1,9 +1,8 @@
-from django.forms import model_to_dict
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, DetailView
-from rest_framework import generics
-from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.views import APIView
+
 from .forms import BlogForm
 from .models import Blog, Category
 from .serializers import BlogSerializer
@@ -50,26 +49,8 @@ class BlogByCategory(ListView):
 # class BlogAPIView(generics.ListAPIView):
 #     queryset = Blog.objects.all()
 #     serializer_class = BlogSerializer
-class BlogAPIView(APIView):
-    def get(self, request):
-        w = Blog.objects.all()
-        return Response({'Записи': BlogSerializer(w, many=True).data})
 
-    def post(self, request):
-        serializer = BlogSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        post_new = Blog.objects.create(
-            title=request.data['title'],
-            content=request.data['content'],
-            photo=request.data['photo'],
-            category_id=request.data['category_id']
-        )
-        return Response({'post': BlogSerializer(post_new).data})
 
-    def put(self, request, *args, **kwargs):
-        pk = kwargs.get('pk', None)
-        if not pk:
-            return Response({"error": "Method PUT not allowed"})
 class ViewBlog(DetailView):
     model = Blog
     context_object_name = 'blog_item'
@@ -91,6 +72,49 @@ def add_blog(request):
     else:
         form = BlogForm()
     return render(request, 'blog/add_blog.html', {'form': form})
+
+
+class BlogAPIView(APIView):
+    def get(self, request):
+        w = Blog.objects.all()
+        return Response({'Записи': BlogSerializer(w, many=True).data})
+
+    def post(self, request):
+        serializer = BlogSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        post_new = Blog.objects.create(
+            title=request.data['title'],
+            content=request.data['content'],
+            photo=request.data['photo'],
+            category_id=request.data['category_id']
+        )
+        return Response({'post': BlogSerializer(post_new).data})
+
+    def put(self, request, *args, **kwargs):
+        pk = kwargs.get('pk', None)
+        if not pk:
+            return Response({"error": "Method PUT not allowed"})
+        try:
+            instance = Blog.objects.get(pk=pk)
+        except:
+            return Response({"error": "Object does not exists"})
+        serializer = BlogSerializer(data=request.data, instance=instance)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({"post": serializer.data})
+
+    def delete(self, request, *args, **kwargs):
+        pk = kwargs.get('pk', None)
+        if not pk:
+            return Response({"Ошибка": "Метод DELETE недоступен"})
+        try:
+            instance = Blog.objects.get(pk=pk)
+        except:
+            return Response({"error": "Объекта не существует"})
+        serializer = BlogSerializer(data=request.data, instance=instance)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return render({"delete": serializer.data})
 
 # def listing(request):
 #     categories = Category.objects.all()
