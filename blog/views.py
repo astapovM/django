@@ -113,8 +113,8 @@ class BlogAPIView(APIView):
             return Response({"error": "Объекта не существует"})
         serializer = BlogSerializer(data=request.data, instance=instance)
         serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return render({"delete": serializer.data})
+        instance.delete()
+        return Response({"delete": serializer.data})
 
 # def listing(request):
 #     categories = Category.objects.all()
