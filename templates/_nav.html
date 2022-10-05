@@ -16,7 +16,7 @@
                         Категория
                     </a>
                     <ul class="dropdown-menu">
-                        {% for item in object_list %}
+                        {% for item in objct_list %}
                             <li><a class="dropdown-item"
                                    href="{% url 'category' item.category_id %}">{{ item.category }}</a></li>
                         {% endfor %}

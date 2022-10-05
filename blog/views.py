@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, DetailView
+from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -73,6 +74,10 @@ def add_blog(request):
         form = BlogForm()
     return render(request, 'blog/add_blog.html', {'form': form})
 
+class BlogApiList(generics.ListCreateAPIView):
+    queryset = Blog.objects.all()
+    serializer_class = BlogSerializer
+
 
 class BlogAPIView(APIView):
     def get(self, request):
@@ -114,7 +119,7 @@ class BlogAPIView(APIView):
         serializer = BlogSerializer(data=request.data, instance=instance)
         serializer.is_valid(raise_exception=True)
         instance.delete()
-        return Response({"delete": serializer.data})
+        return Response({"delete": instance})
 
 # def listing(request):
 #     categories = Category.objects.all()

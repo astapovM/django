@@ -8,5 +8,6 @@ urlpatterns = [
     # path('blog/<int:blog_id>/', view_blog, name='view_blog'),
     path('blog/<int:pk>/', ViewBlog.as_view(), name='view_blog'),
     path('blog/add-blog/', add_blog, name="add_blog"),
-    path('api/v1/bloglist', BlogAPIView.as_view()),
+    path('api/v1/bloglist', BlogApiList.as_view()),
+    path('api/v1/bloglist/<int:pk>/', BlogApiList.as_view()),
 ]
