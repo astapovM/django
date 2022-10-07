@@ -11,6 +11,7 @@ class BlogModel:
 
 
 class BlogSerializer(serializers.ModelSerializer):
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     class Meta:
         model = Blog
         fields = "__all__"
